@@ -1,0 +1,25 @@
+{
+  "name": "douyin-content-resolver-experiment",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "douyin-content-resolver": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --configLoader runner",
+    "resolve": "npm run build && node dist/cli.js"
+  },
+  "dependencies": {
+    "playwright-core": "^1.52.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.13.10",
+    "jsdom": "^26.0.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

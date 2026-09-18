@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "视频文案助手",
+  "version": "0.1.0",
+  "description": "提取当前抖音视频信息，并通过本地服务转写短时或完整视频口播。",
+  "action": {
+    "default_title": "视频文案助手"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "sidePanel",
+    "storage",
+    "tabs",
+    "tabCapture",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8787/*",
+    "https://www.douyin.com/*",
+    "https://*.douyin.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.douyin.com/*",
+        "https://*.douyin.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/douyin-content-resolver-report.schema.json",
+  "title": "Douyin Content Resolver Report",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "resolverVersion",
+    "status",
+    "input",
+    "navigation",
+    "video",
+    "subtitles",
+    "audio",
+    "warnings",
+    "errors",
+    "logs",
+    "startedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "resolverVersion": { "type": "string" },
+    "status": { "enum": ["success", "partial", "blocked", "error"] },
+    "input": {
+      "type": "object",
+      "required": ["shareUrl", "acceptedHost", "receivedAt"],
+      "properties": {
+        "shareUrl": { "type": "string" },
+        "acceptedHost": { "type": "boolean" },
+        "receivedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "navigation": {
+      "type": "object",
+      "required": ["redirectChain"],
+      "properties": {
+        "finalUrl": { "type": "string" },
+        "responseStatus": { "type": "integer" },
+        "pageTitle": { "type": "string" },
+        "redirectChain": { "type": "array", "items": { "$ref": "#/$defs/redirectHop" } }
+      },
+      "additionalProperties": false
+    },
+    "video": {
+      "type": "object",
+      "required": ["visibleText", "evidence"],
+      "properties": {
+        "videoId": { "type": "string" },
+        "author": { "type": "string" },
+        "titleOrDescription": { "type": "string" },
+        "visibleText": { "type": "string" },
+        "evidence": { "$ref": "#/$defs/videoEvidence" }
+      },
+      "additionalProperties": false
+    },
+    "subtitles": { "$ref": "#/$defs/subtitles" },
+    "audio": { "$ref": "#/$defs/audio" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "errors": { "type": "array", "items": { "type": "string" } },
+    "logs": { "type": "array", "items": { "$ref": "#/$defs/log" } },
+    "environment": { "$ref": "#/$defs/environment" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "completedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "redirectHop": {
+      "type": "object",
+      "required": ["url"],
+      "properties": {
+        "url": { "type": "string" },
+        "method": { "type": "string" },
+        "status": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "fieldEvidence": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": { "enum": ["url", "link", "visible-dom", "meta", "media-element", "performance-resource", "not-found"] },
+        "selector": { "type": "string" },
+        "detail": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "videoEvidence": {
+      "type": "object",
+      "required": ["videoId", "author", "titleOrDescription", "visibleText"],
+      "properties": {
+        "videoId": { "$ref": "#/$defs/fieldEvidence" },
+        "author": { "$ref": "#/$defs/fieldEvidence" },
+        "titleOrDescription": { "$ref": "#/$defs/fieldEvidence" },
+        "visibleText": { "$ref": "#/$defs/fieldEvidence" }
+      },
+      "additionalProperties": false
+    },
+    "subtitles": {
+      "type": "object",
+      "required": ["exists", "confidence", "visibleNodeCount", "trackCount", "textTrackCount", "evidence"],
+      "properties": {
+        "exists": { "type": "boolean" },
+        "confidence": { "enum": ["strong", "weak", "none"] },
+        "visibleText": { "type": "string" },
+        "visibleNodeCount": { "type": "integer", "minimum": 0 },
+        "trackCount": { "type": "integer", "minimum": 0 },
+        "textTrackCount": { "type": "integer", "minimum": 0 },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "required": ["exists", "usableInPage", "mediaElementCount", "readyMediaCount", "sourceCount", "sourceKinds", "sourceUrls", "evidence"],
+      "properties": {
+        "exists": { "type": "boolean" },
+        "usableInPage": { "type": "boolean" },
+        "mediaElementCount": { "type": "integer", "minimum": 0 },
+        "readyMediaCount": { "type": "integer", "minimum": 0 },
+        "sourceCount": { "type": "integer", "minimum": 0 },
+        "sourceKinds": { "type": "array", "items": { "enum": ["network", "blob", "data", "unknown"] } },
+        "sourceUrls": { "type": "array", "items": { "type": "string" } },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "log": {
+      "type": "object",
+      "required": ["timestamp", "level", "phase", "event"],
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "level": { "enum": ["info", "warn", "error"] },
+        "phase": { "type": "string" },
+        "event": { "type": "string" },
+        "details": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "required": ["browser", "headless", "platform"],
+      "properties": {
+        "browser": { "enum": ["chrome", "edge", "custom"] },
+        "executablePath": { "type": "string" },
+        "headless": { "type": "boolean" },
+        "platform": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

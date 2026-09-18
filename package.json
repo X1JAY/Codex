@@ -1,0 +1,18 @@
+{
+  "name": "douyin-copy-transcript",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "extension",
+    "experiments/content-resolver"
+  ],
+  "scripts": {
+    "build": "npm --workspace extension run build",
+    "typecheck": "npm --workspace extension run typecheck",
+    "test": "npm --workspace extension run test",
+    "resolver:typecheck": "npm --workspace douyin-content-resolver-experiment run typecheck",
+    "resolver:test": "npm --workspace douyin-content-resolver-experiment run test",
+    "resolver:build": "npm --workspace douyin-content-resolver-experiment run build",
+    "resolver": "npm --workspace douyin-content-resolver-experiment run resolve --"
+  }
+}
